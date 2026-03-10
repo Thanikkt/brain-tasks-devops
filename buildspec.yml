@@ -1,17 +1,10 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo Installing kubectl
-      - curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-      - chmod +x kubectl
-      - mv kubectl /usr/local/bin/kubectl
-
   pre_build:
     commands:
-      - echo Build started on `date`
       - echo Logging in to DockerHub
+      - docker login -u $DOCKER_USER -p $DOCKER_PASS
 
   build:
     commands:
@@ -20,6 +13,4 @@ phases:
 
   post_build:
     commands:
-      - echo Deploying to EKS
-      - kubectl apply -f deployment.yaml
-      - kubectl apply -f service.yaml
+      - echo Build completed
