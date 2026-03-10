@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM public.ecr.aws/nginx/nginx:latest
 
 COPY dist /usr/share/nginx/html
 
