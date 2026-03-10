@@ -1,23 +1,25 @@
 version: 0.2
 
 phases:
-
   install:
-    runtime-versions:
-      docker: 20
+    commands:
+      - echo Installing kubectl
+      - curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/kubectl
 
   pre_build:
     commands:
-      - echo Logging into DockerHub
-      - docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - echo Build started on `date`
+      - echo Logging in to DockerHub
 
   build:
     commands:
+      - echo Building Docker image
       - docker build -t brain-tasks-app .
-      - docker tag brain-tasks-app $DOCKER_USER/brain-tasks-app:latest
 
   post_build:
     commands:
-      - docker push $DOCKER_USER/brain-tasks-app:latest
+      - echo Deploying to EKS
       - kubectl apply -f deployment.yaml
       - kubectl apply -f service.yaml
