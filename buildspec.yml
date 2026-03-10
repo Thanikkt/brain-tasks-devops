@@ -1,11 +1,6 @@
 version: 0.2
 
 phases:
-  pre_build:
-    commands:
-      - echo Logging in to DockerHub
-      - docker login -u $DOCKER_USER -p $DOCKER_PASS
-
   build:
     commands:
       - echo Building Docker image
